@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tic Tac Toe · Radiant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen active">
+    <div class="login-card">
+      <div class="brand-icon mb-3">
+        <i class="fa-solid fa-hashtag"></i>
+      </div>
+      <h1 class="game-title">Tic Tac Toe</h1>
+      <p class="subtitle">Enter your name to begin</p>
+      <div class="input-group-custom">
+        <i class="fa-solid fa-user input-icon"></i>
+        <input type="text" id="username-input" placeholder="Your name..." maxlength="20" autocomplete="off"/>
+      </div>
+      <div id="login-error" class="error-msg d-none">Please enter your name to continue.</div>
+      <button id="login-btn" class="btn-primary-custom w-100">
+        <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Start Playing
+      </button>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-screen" class="screen">
+    <div class="game-layout">
+
+      <!-- Top Header (full width) -->
+      <header class="game-header">
+        <div class="header-brand">
+          <div class="brand-dot"><i class="fa-solid fa-hashtag"></i></div>
+          <span class="brand-label">Tic Tac Toe</span>
+        </div>
+        <div class="header-player">
+          <i class="fa-solid fa-circle-user"></i>
+          <div class="player-name-block">
+            <small>Playing as</small>
+            <span id="display-name">Player</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="logout-btn" title="Logout">
+          <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+        </button>
+      </header>
+
+      <!-- Main Content Row -->
+      <div class="game-content">
+
+        <!-- Left: Game Column -->
+        <div class="game-col">
+
+          <!-- Difficulty Selector -->
+          <div class="difficulty-bar">
+            <span class="difficulty-label"><i class="fa-solid fa-brain me-2"></i>Difficulty</span>
+            <div class="difficulty-options">
+              <button class="diff-btn active" data-level="easy">
+                <i class="fa-solid fa-seedling"></i> Easy
+              </button>
+              <button class="diff-btn" data-level="medium">
+                <i class="fa-solid fa-fire"></i> Medium
+              </button>
+              <button class="diff-btn" data-level="hard">
+                <i class="fa-solid fa-skull"></i> Hard
+              </button>
+            </div>
+          </div>
+
+          <div class="status-bar" id="status-bar">
+            <i class="fa-solid fa-circle-dot me-2 pulse-icon"></i>
+            <span id="status-text">Your turn</span>
+          </div>
+
+          <div class="board" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+          </div>
+
+          <div class="controls">
+            <button id="restart-btn" class="btn-secondary-custom">
+              <i class="fa-solid fa-rotate-right me-2"></i> New Game
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right: Stats Column -->
+        <div class="stats-col">
+          <div class="stats-panel">
+            <div class="stats-panel-header">
+              <i class="fa-solid fa-chart-column me-2"></i>
+              <span>Result History</span>
+            </div>
+
+            <div class="stat-boxes">
+              <div class="stat-box wins">
+                <i class="fa-solid fa-trophy"></i>
+                <span id="side-wins">0</span>
+                <small>Wins</small>
+              </div>
+              <div class="stat-box losses">
+                <i class="fa-solid fa-skull"></i>
+                <span id="side-losses">0</span>
+                <small>Losses</small>
+              </div>
+              <div class="stat-box draws">
+                <i class="fa-solid fa-handshake"></i>
+                <span id="side-draws">0</span>
+                <small>Draws</small>
+              </div>
+            </div>
+
+            <div class="live-chart-wrap">
+              <canvas id="live-chart"></canvas>
+              <p id="live-no-games">Play a game to see your stats here!</p>
+            </div>
+
+            <div class="win-rate-section">
+              <span>Win Rate</span>
+              <div class="win-rate-bar">
+                <div class="win-rate-fill" id="win-rate-fill"></div>
+              </div>
+              <span id="win-rate-pct">0%</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Overlay -->
+  <div id="result-overlay" class="result-overlay d-none">
+    <div class="result-card">
+      <div class="result-icon" id="result-icon"></div>
+      <h2 id="result-title"></h2>
+      <p id="result-msg"></p>
+      <button id="result-new-game" class="btn-primary-custom mt-3">
+        <i class="fa-solid fa-rotate-right me-2"></i> Play Again
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
